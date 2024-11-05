@@ -41,7 +41,7 @@ def maybe_insert_system_message(messages, tokenizer):
 def apply_chat_template(
     example,
     tokenizer,
-    task: Literal["sft", "generation", "rm", "dpo", "selm"],
+    task: Literal["sft", "generation", "rm", "dpo", "selm", "copo"],
     auto_insert_empty_system_msg: bool = True,
 ):
     if task in ["sft", "generation"]:
@@ -79,7 +79,7 @@ def apply_chat_template(
             raise ValueError(
                 f"Could not format example as dialogue for `dpo` task! Require `[chosen, rejected]` keys but found {list(example.keys())}"
             )
-    elif task == "selm":
+    elif task in ["selm", "copo"]:
         prompt_messages = example["chosen"][:-1]
         chosen_messages = example["chosen"][-1:]
         rejected_messages = example["rejected"][-1:]
@@ -100,7 +100,7 @@ def get_datasets(
     data_config: DataArguments | dict,
     splits: List[str] = ["train", "test"],
     shuffle: bool = True,
-    task: Literal["sft", "generation", "rm", "dpo", "selm"]="dpo"
+    task: Literal["sft", "generation", "rm", "dpo", "selm", "copo"]="dpo"
 ) -> DatasetDict:
     """
     Loads one or more datasets with varying training set proportions.
@@ -116,7 +116,7 @@ def get_datasets(
     Returns
         [`DatasetDict`]: The dataset dictionary containing the loaded datasets.
     """
-    if task != "selm":
+    if task not in ["selm", "copo"]:
         if type(data_config) is DataArguments:
             # Structure of the config to read the datasets and their mix
             # datasets_mixer:
@@ -137,7 +137,7 @@ def get_datasets(
 
         raw_datasets = mix_datasets(dataset_mixer, splits=splits, shuffle=shuffle)
     else:
-        assert task == "selm"
+        assert task in ["selm", "copo"]
         dataset_mixer = data_config.dataset_mixer
         # TODO: 这里改成从本地load
         # raw_datasets = mix_datasets_optm(dataset_mixer, splits=splits, shuffle=shuffle)
