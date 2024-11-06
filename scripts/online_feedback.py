@@ -66,11 +66,12 @@ if __name__ == "__main__":
     parser = H4ArgumentParser((ModelArguments, DataArguments, DPOConfig))
     model_args, data_args, training_args = parser.parse()
     if type(data_args.dataset_mixer) == str:
-        # {'updated': 'baichenjia/SELM-Llama-3-8B-Instruct-dataset_iter_0', 'original': 'HuggingFaceH4/ultrafeedback_binarized'}
+        # {'updated': 'baichenjia/COPO-Llama-3-8B-Instruct-dataset_iter_0', 'original': 'HuggingFaceH4/ultrafeedback_binarized'}
         data_args.dataset_mixer = eval(data_args.dataset_mixer)
     os.environ["WANDB_PROJECT"] = "SELM"                                                 # TODO: set wandb
     print("***** In Online Feedback:", model_args.model_name_or_path)
-    tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path)
+    # tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path)
+    tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path, token="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")
     try:
         print("I am here 1")
         ref_model = LLM(model=model_args.model_name_or_path, tokenizer=model_args.model_name_or_path,
