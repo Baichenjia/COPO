@@ -50,14 +50,14 @@ for i in $(seq 1 $iter_num); do          # TODO: 这里看需要从哪儿开始
     fi
 
     echo "** 执行 online_feedback.py **"
-     python scripts/online_feedback.py recipes/llama3-copo/copo_config_qlora.yaml learning_rate=$learning_rate model_name_or_path=$model_name_or_path dataset_mixer=$dataset_mixer dataset_splits=$dataset_splits run_name="OF-iter-$i" || exit 1
+    python scripts/online_feedback.py recipes/llama3-copo/copo_config_qlora.yaml learning_rate=$learning_rate model_name_or_path=$model_name_or_path dataset_mixer=$dataset_mixer dataset_splits=$dataset_splits run_name="OF-iter-$i" || exit 1
     wait 
 
-    # echo "** 执行 count_trainer.py **"
-    # accelerate launch --config_file recipes/accelerate_configs/multi_gpu.yaml --num_processes 2 \
-    #     scripts/count_trainer.py recipes/llama3-copo/copo_config_qlora.yaml learning_rate=$learning_rate model_name_or_path=$model_name_or_path dataset_mixer=$dataset_mixer \
-    #     hub_model_id=$hub_model_id output_dir="$output_dir/vhead" run_name="Count-iter-$i" per_device_train_batch_size=1 per_device_eval_batch_size=1 learning_rate=1e-4
-    # wait 
+    echo "** 执行 count_trainer.py **"
+    accelerate launch --config_file recipes/accelerate_configs/multi_gpu.yaml --num_processes 2 \
+        scripts/count_trainer.py recipes/llama3-copo/copo_config_qlora.yaml learning_rate=$learning_rate model_name_or_path=$model_name_or_path dataset_mixer=$dataset_mixer \
+        hub_model_id=$hub_model_id output_dir="$output_dir/vhead" run_name="Count-iter-$i" per_device_train_batch_size=1 per_device_eval_batch_size=1 learning_rate=1e-4
+    wait 
     
     # echo "** 执行 run_copo_count.py **"
     # ACCELERATE_LOG_LEVEL=info accelerate launch --config_file recipes/accelerate_configs/deepspeed_zero3.yaml \
