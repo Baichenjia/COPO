@@ -440,13 +440,13 @@ class COPOTrainer(DPOTrainer):
         assert self.loss_type == "sigmoid"
         # Self-exploring loss
         if self.loss_type == "sigmoid":      
-            # 这里COPO增加了 response_logratios 
+            # 这里 SELM 增加了 response_logratios 
             # losses = -F.logsigmoid(self.beta * logits) + self.alpha * self.beta * response_logratios
             
             count_reward = 0.1 * self.count_reward(reference_response_hidden_state)
             
             losses_dpo = -F.logsigmoid(self.beta * logits)
-            losses_count = self.alpha * (torch.exp(response_logratios) * count_reward).detach() * policy_response_logps
+            losses_count = -1. * self.alpha * (torch.exp(response_logratios) * count_reward).detach() * policy_response_logps
             losses = losses_dpo + losses_count
 
             losses_dict = {"count_reward": count_reward, "losses_dpo": losses_dpo, "losses_count": losses_count}
