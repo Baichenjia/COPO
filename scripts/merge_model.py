@@ -22,14 +22,13 @@ from alignment import (
     is_adapter_model,
 )
 from peft import PeftConfig, PeftModel
-from selm_trainer import SELMTrainer
 
     
 def main():
     parser = H4ArgumentParser((ModelArguments, DataArguments, DPOConfig))
     model_args, data_args, training_args = parser.parse()
     logger = logging.getLogger(training_args.hub_model_id)
-    os.environ["WANDB_PROJECT"] = "SELM"                                                 # TODO: set wandb
+    os.environ["WANDB_PROJECT"] = "COPO"                                                 # TODO: set wandb
 
     if type(data_args.dataset_mixer) == str:
         data_args.dataset_mixer = eval(data_args.dataset_mixer)

@@ -37,7 +37,6 @@ from alignment import (
     is_adapter_model,
 )
 from peft import PeftConfig, PeftModel
-# from selmC_trainer import SELMCountTrainer
 from copo_trainer import COPOTrainer
 from count_trainer import CountValueHead
 
@@ -47,7 +46,7 @@ def main():
     model_args, data_args, training_args = parser.parse()
     logger = logging.getLogger(training_args.hub_model_id)
 
-    os.environ["WANDB_PROJECT"] = "SELM"                                                 # TODO: set wandb
+    os.environ["WANDB_PROJECT"] = "COPO"                                                 # TODO: set wandb
 
     if type(data_args.dataset_mixer) == str:
         data_args.dataset_mixer = eval(data_args.dataset_mixer)
@@ -81,7 +80,7 @@ def main():
     ###############
     # Load datasets
     ###############
-    raw_datasets = get_datasets(data_args, splits=data_args.dataset_splits, task="selm")
+    raw_datasets = get_datasets(data_args, splits=data_args.dataset_splits, task="copo")
     logger.info(
         f"Training on the following splits: {[split + ' : ' + str(dset.num_rows) for split, dset in raw_datasets.items()]}"
     )
@@ -100,7 +99,7 @@ def main():
         apply_chat_template,
         fn_kwargs={
             "tokenizer": tokenizer,
-            "task": "selm",
+            "task": "copo",             # TODO
         },
         num_proc=data_args.preprocessing_num_workers,
         remove_columns=column_names,
@@ -184,7 +183,7 @@ def main():
         model_init_kwargs=model_kwargs,
         ref_model_init_kwargs=ref_model_kwargs,
         args=training_args,
-        alpha=training_args.alpha,        # SELM相对于DPO新增参数
+        alpha=training_args.alpha,        # 相对于DPO新增参数
         beta=training_args.beta,
         train_dataset=raw_datasets["train"],
         eval_dataset=raw_datasets["test"],

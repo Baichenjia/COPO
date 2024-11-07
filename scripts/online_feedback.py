@@ -68,7 +68,7 @@ if __name__ == "__main__":
     if type(data_args.dataset_mixer) == str:
         # {'updated': 'baichenjia/COPO-Llama-3-8B-Instruct-dataset_iter_0', 'original': 'HuggingFaceH4/ultrafeedback_binarized'}
         data_args.dataset_mixer = eval(data_args.dataset_mixer)
-    os.environ["WANDB_PROJECT"] = "SELM"                                                 # TODO: set wandb
+    os.environ["WANDB_PROJECT"] = "COPO"                                                 # TODO: set wandb
     print("***** In Online Feedback:", model_args.model_name_or_path)
     # tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path)
     tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path, token="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")

@@ -47,8 +47,6 @@ import os
 if is_peft_available():
     from peft import PeftModel, get_peft_model, prepare_model_for_kbit_training
 
-# global_value_head = torch.load(os.path.join("/ailab/user/baichenjia/baichenjia/SELM/data/SELM-Llama-3-8B-Instruct-iter-1", "vhead", "vhead.pickle")).cuda()
-
 class COPOTrainer(DPOTrainer):
     def __init__(
         self,
@@ -442,7 +440,7 @@ class COPOTrainer(DPOTrainer):
         assert self.loss_type == "sigmoid"
         # Self-exploring loss
         if self.loss_type == "sigmoid":      
-            # 这里SELM增加了 response_logratios 
+            # 这里COPO增加了 response_logratios 
             # losses = -F.logsigmoid(self.beta * logits) + self.alpha * self.beta * response_logratios
             
             count_reward = 0.1 * self.count_reward(reference_response_hidden_state)
