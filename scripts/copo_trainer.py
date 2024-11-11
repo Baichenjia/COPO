@@ -415,7 +415,7 @@ class COPOTrainer(DPOTrainer):
         assert mean_square_flips.shape == (last_hidden_state.shape[0], 1)
         
         reward = mean_square_flips ** self.bonus_exponent
-        return reward
+        return reward.squeeze()
         # return self.reward_scale * (reward - self.reward_mean) / self.reward_var
 
     def optimistic_dpo_loss(
@@ -449,7 +449,7 @@ class COPOTrainer(DPOTrainer):
             losses_count = -1. * self.alpha * (torch.exp(response_logratios) * count_reward).detach() * policy_response_logps
             losses = losses_dpo + losses_count    # torch.Size([2])
 
-            print("shapes 1:", reference_response_hidden_state.shape, count_reward.shape, response_logratios.shape, policy_response_logps.shape)
+            # print("shapes 1:", reference_response_hidden_state.shape, count_reward.shape, response_logratios.shape, policy_response_logps.shape)
             # shapes 1: torch.Size([2, 647, 4096]) torch.Size([]) torch.Size([2]) torch.Size([2])
 
             losses_dict = {"count_reward": count_reward, "losses_dpo": losses_dpo, "losses_count": losses_count, "response_logratios_exp": torch.exp(response_logratios)}
