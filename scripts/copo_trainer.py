@@ -449,7 +449,10 @@ class COPOTrainer(DPOTrainer):
             losses_count = -1. * self.alpha * (torch.exp(response_logratios) * count_reward).detach() * policy_response_logps
             losses = losses_dpo + losses_count
 
-            losses_dict = {"count_reward": count_reward, "losses_dpo": losses_dpo, "losses_count": losses_count}
+            print("shapes 1:", reference_response_hidden_state.shape, count_reward.shape, response_logratios.shape, policy_response_logps.shape)
+            print("shapes 2", losses_dpo.shape, losses_count.shape, losses.shape)
+
+            losses_dict = {"count_reward": count_reward, "losses_dpo": losses_dpo, "losses_count": losses_count, "response_logratios_exp": torch.exp(response_logratios)}
 
             # losses = -F.logsigmoid(self.beta * logits) + self.alpha * (torch.exp(response_logratios) * count_reward).detach() * policy_response_logps
             
@@ -565,6 +568,7 @@ class COPOTrainer(DPOTrainer):
         metrics[f"{prefix}logits/chosen"] = policy_chosen_logits.detach().mean().cpu()
 
         metrics[f"{prefix}rewards/total_loss"] = losses.detach().mean().cpu()
+        metrics[f"{prefix}logps/response_logratios_exp"] = losses_dict["response_logratios_exp"].detach().mean().cpu() 
         metrics[f"{prefix}rewards/count_reward"] = losses_dict["count_reward"].detach().mean().cpu()      # TODO: log count-reward
         metrics[f"{prefix}rewards/losses_dpo"] = losses_dict["losses_dpo"].detach().mean().cpu()          # TODO: log loss dpo
         metrics[f"{prefix}rewards/losses_count"] = losses_dict["losses_count"].detach().mean().cpu()      # TODO: log loss count
