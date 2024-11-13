@@ -444,7 +444,7 @@ class COPOTrainer(DPOTrainer):
             # losses = -F.logsigmoid(self.beta * logits) + self.alpha * self.beta * response_logratios
             
             count_reward = 0.1 * self.count_reward(reference_response_hidden_state)    # (2, 647, 4096) -> (2)
-            logratio_clip = torch.clip(torch.exp(response_logratios), max=10.0)
+            logratio_clip = torch.clip(torch.exp(response_logratios), max=5.0)
             losses_dpo = -F.logsigmoid(self.beta * logits)      # (2)
             # losses_count = -1. * self.alpha * (torch.exp(response_logratios) * count_reward).detach() * policy_response_logps
             losses_count = -1. * self.alpha * (logratio_clip * count_reward).detach() * policy_response_logps
