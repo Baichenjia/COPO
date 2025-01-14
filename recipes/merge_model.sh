@@ -9,8 +9,8 @@ export HF_ENDPOINT="https://hf-mirror.com"
 
 echo "START TIME: $(date)"
 
-export HUGGINGFACE_API_KEY="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"
-export WANDB_API_KEY="a0b92158d55e0ca16cd94cbdebaef9117c99a118"
+export HUGGINGFACE_API_KEY="xxxxxxxx"     # TODO: your huggingface api key
+export WANDB_API_KEY="xxxxxxxx"           # TODO: your wandb api key
 
 cd /home/baichenjia/COPO
 

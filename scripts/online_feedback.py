@@ -68,7 +68,7 @@ if __name__ == "__main__":
     if type(data_args.dataset_mixer) == str:
         data_args.dataset_mixer = eval(data_args.dataset_mixer)
     os.environ["WANDB_PROJECT"] = "COPO"                                                 # TODO: set wandb
-    tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path, token="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")
+    tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path, token="your token")     # your token
     try:
         ref_model = LLM(model=model_args.model_name_or_path, tokenizer=model_args.model_name_or_path,
                         gpu_memory_utilization=0.6, swap_space=4, tensor_parallel_size=torch.cuda.device_count(),  # TODO: gpu_memory_utilization:0.6时需要使用双卡
